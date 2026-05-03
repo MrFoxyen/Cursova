@@ -20,13 +20,23 @@ public class DictionaryController {
     public String index(@RequestParam(required = false) String word,
                         @RequestParam(required = false) String mode,
                         HttpSession session, Model model) {
-        initSession(session, model);
+
+        // 1. Ініціалізація сесії (безпечна)
+        Set<String> favorites = (Set<String>) session.getAttribute("favorites");
+        if (favorites == null) {
+            favorites = new LinkedHashSet<>();
+            session.setAttribute("favorites", favorites);
+        }
+        model.addAttribute("favorites", favorites);
+
+        // 2. Обробка пошуку
         if (word != null && !word.isBlank() && mode != null) {
-            model.addAttribute("results", service.translate(word, mode));
+            List<String> results = service.translate(word, mode);
+            model.addAttribute("results", results);
             model.addAttribute("lastWord", word);
             model.addAttribute("currentMode", mode);
         }
-        return "index"; // Має бути файл src/main/resources/templates/index.html
+        return "index";
     }
 
     @PostMapping("/add-favorite")
@@ -49,12 +59,5 @@ public class DictionaryController {
         } catch (Exception e) {
             return "redirect:/?msg=error";
         }
-    }
-
-    private void initSession(HttpSession session, Model model) {
-        if (session.getAttribute("favorites") == null) {
-            session.setAttribute("favorites", new LinkedHashSet<String>());
-        }
-        model.addAttribute("favorites", session.getAttribute("favorites"));
     }
 }
