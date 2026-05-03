@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Українсько-Англійський словник</title>
+
+    <!-- CSS: Стилі Bootstrap та іконки -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+
+    <style>
+        :root { --sidebar-bg: #1a1d20; --main-bg: #f4f7f6; }
+        body { background-color: var(--main-bg); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; margin-bottom: 40px; }
+
+        /* Бокова панель */
+        .sidebar { background: var(--sidebar-bg); color: white; height: 100vh; position: fixed; overflow-y: auto; padding: 25px; border-right: 1px solid #333; z-index: 1000; }
+        .sidebar h4 { color: #ffc107; border-bottom: 1px solid #3d4145; padding-bottom: 15px; margin-bottom: 25px; }
+
+        /* Елементи обраного */
+        .fav-link { color: #adb5bd; text-decoration: none; display: block; padding: 12px; border-radius: 10px; transition: 0.2s; margin-bottom: 8px; background: #2c3034; border: 1px solid transparent; }
+        .fav-link:hover { background: #3d4145; color: white; border-color: #ffc107; transform: translateX(5px); }
+
+        /* Основний контент */
+        .main-content { margin-left: 25%; padding: 40px; }
+        .search-container { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); }
+
+        /* Картки результатів */
+        .result-card { margin-top: 30px; padding-top: 25px; border-top: 2px solid #f0f0f0; animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .badge-translation { font-size: 1.2rem; padding: 15px 25px; border-radius: 12px; background: #fff; color: #333; border: 2px solid #e9ecef; transition: 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .badge-translation:hover { border-color: #0d6efd; transform: translateY(-3px); }
+
+        /* Статус бар внизу */
+        .status-bar { position: fixed; bottom: 0; right: 0; width: 75%; background: white; padding: 5px 20px; border-top: 1px solid #dee2e6; font-size: 0.85rem; color: #6c757d; z-index: 1001; }
+    </style>
+</head>
+<body>
+
+<!-- ПОВІДОМЛЕННЯ (Алерт) -->
+<div th:if="${param.msg != null}" class="container-fluid pt-3" style="position: fixed; top: 0; z-index: 2000; width: 75%; right: 0;">
+    <div th:if="${param.msg[0] == 'success'}" class="alert alert-success alert-dismissible fade show border-0 shadow" role="alert">
+        <i class="bi bi-check-circle-fill me-2"></i> <strong>Успіх!</strong> Базу даних словника синхронізовано.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${param.msg[0] == 'error'}" class="alert alert-danger alert-dismissible fade show border-0 shadow" role="alert">
+        <i class="bi bi-exclamation-triangle-fill me-2"></i> <strong>Помилка!</strong> Не вдалося підключитися до мережі.
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+        <!-- SIDEBAR (Керування та Обране) -->
+        <div class="col-md-3 sidebar shadow">
+            <h4><i class="bi bi-cloud-check-fill me-2"></i> Керування</h4>
+
+            <a href="/cloud-update" class="btn btn-outline-warning w-100 mb-5 py-2 fw-bold">
+                <i class="bi bi-cloud-download me-2"></i> Оновити з мережі
+            </a>
+
+            <h5 class="text-secondary mb-3"><i class="bi bi-star-fill text-warning me-2"></i> Обране</h5>
+
+            <div class="mt-2">
+                <!-- ПЕРЕВІРКА: чи не пустий список, щоб не було помилки 500 -->
+                <div th:if="${favorites != null and !#lists.isEmpty(favorites)}">
+                    <div th:each="favStr : ${favorites}">
+                        <a th:with="parts=${#strings.arraySplit(favStr, ':')}"
+                           th:href="@{/(word=${parts[0]}, mode=${parts[1]})}"
+                           class="fav-link shadow-sm">
+                            <span th:text="${parts[0]}"></span>
+                            <span class="badge bg-dark text-warning float-end" style="font-size: 0.7rem;"
+                                  th:text="${parts[1] == 'en-uk' ? 'EN-UK' : 'UK-EN'}"></span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Повідомлення, якщо список ще порожній -->
+                <div th:if="${favorites == null or #lists.isEmpty(favorites)}" class="text-muted small ps-2 mt-3 italic">
+                    Список обраного порожній...
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="col-md-9 main-content">
+            <div class="search-container">
+                <h2 class="mb-4 fw-bold"><i class="bi bi-translate text-primary me-2"></i> Українсько-Англійський <span class="text-primary">словник</span></h2>
+
+                <!-- ФОРМА ПОШУКУ (GET) -->
+                <form action="/" method="get" class="row g-3">
+                    <div class="col-md-7">
+                        <div class="input-group input-group-lg shadow-sm">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input type="text" name="word" class="form-control border-start-0"
+                                   placeholder="Введіть слово для перекладу..." th:value="${lastWord}" required>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <select name="mode" class="form-select form-select-lg shadow-sm">
+                            <option value="en-uk" th:selected="${currentMode == 'en-uk'}">English ➔ Українська</option>
+                            <option value="uk-en" th:selected="${currentMode == 'uk-en'}">Українська ➔ English</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary btn-lg w-100 shadow-sm fw-bold">Пошук</button>
+                    </div>
+                </form>
+
+                <!-- ВІДОБРАЖЕННЯ РЕЗУЛЬТАТІВ -->
+                <div th:if="${results != null}" class="result-card">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h1 class="display-5 fw-bold m-0 text-dark" th:text="${lastWord}"></h1>
+                        <form action="/add-favorite" method="post">
+                            <input type="hidden" name="word" th:value="${lastWord}">
+                            <input type="hidden" name="mode" th:value="${currentMode}">
+                            <button type="submit" class="btn btn-warning shadow-sm fw-bold border-0">
+                                <i class="bi bi-star-fill me-1"></i> Зберегти в обране
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="row g-3 mt-2">
+                        <div th:each="res : ${results}" class="col-auto">
+                            <div class="badge-translation shadow-sm">
+                                <span th:text="${res}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ПОВІДОМЛЕННЯ ЯКЩО НЕ ЗНАЙДЕНО -->
+                <div th:if="${results == null and lastWord != null}" class="alert alert-warning mt-5 rounded-4 shadow-sm border-0 p-4">
+                    <h5 class="m-0 text-dark"><i class="bi bi-info-circle-fill me-3 text-warning"></i> На жаль, слово "<strong>[[${lastWord}]]</strong>" не знайдено в базі даних.</h5>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- FOOTER STATUS BAR -->
+<div class="status-bar d-flex justify-content-between">
+    <span>Курсова робота | Напрям: Прикладна математика</span>
+    <span th:text="'Статус системи: ' + (${results != null} ? 'Відображення результатів' : 'Очікування запиту')"></span>
+</div>
+
+<!-- JS: Скрипт Bootstrap (ОБОВ'ЯЗКОВО ДЛЯ РОБОТИ КНОПКИ ЗАКРИТТЯ ТА ІНТЕРФЕЙСУ) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
