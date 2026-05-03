@@ -8,7 +8,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
-@Controller
+@Controller // МАЄ БУТИ САМЕ @Controller
 public class DictionaryController {
     private final DictionaryService service;
 
@@ -21,7 +21,8 @@ public class DictionaryController {
                         @RequestParam(required = false) String mode,
                         HttpSession session, Model model) {
 
-        // 1. Ініціалізація сесії (безпечна)
+        // Безпечна ініціалізація обраного
+        @SuppressWarnings("unchecked")
         Set<String> favorites = (Set<String>) session.getAttribute("favorites");
         if (favorites == null) {
             favorites = new LinkedHashSet<>();
@@ -29,21 +30,20 @@ public class DictionaryController {
         }
         model.addAttribute("favorites", favorites);
 
-        // 2. Обробка пошуку
         if (word != null && !word.isBlank() && mode != null) {
-            List<String> results = service.translate(word, mode);
-            model.addAttribute("results", results);
+            model.addAttribute("results", service.translate(word, mode));
             model.addAttribute("lastWord", word);
             model.addAttribute("currentMode", mode);
         }
-        return "index";
+
+        return "index"; // Spring шукатиме файл templates/index.html
     }
 
     @PostMapping("/add-favorite")
     public String addFavorite(@RequestParam String word, @RequestParam String mode, HttpSession session) {
         @SuppressWarnings("unchecked")
         Set<String> favorites = (Set<String>) session.getAttribute("favorites");
-        if (favorites != null && !word.isBlank()) {
+        if (favorites != null && word != null && !word.isBlank()) {
             favorites.add(word + ":" + mode);
         }
         String encodedWord = URLEncoder.encode(word, StandardCharsets.UTF_8);
