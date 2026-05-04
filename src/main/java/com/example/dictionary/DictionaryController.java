@@ -51,7 +51,7 @@ public class DictionaryController {
     @GetMapping("/cloud-update")
     public String cloudUpdate() {
         try {
-            service.loadFromUrl("https://gist.githubusercontent.com/Alex-Cloud-Dev/7e5f3f888f8d9f1c7d2c3e4b5a6f7e8d/raw/dictionary.txt");
+            service.loadFromUrl("https://gist.githubusercontent.com/MrFoxyen/a155e3435932943734978df24f4bf2ce/raw/39ab083a24b44c194fb53b36b019a2f7c9cf4cb5/dictionary.txt");
             return "redirect:/?msg=success";
         } catch (Exception e) {
             return "redirect:/?msg=error";
