@@ -1,45 +1,40 @@
-cloud:хмара, мережа
-java:мова програмування
-web:веб-сайт, мережа
-apple:яблуко
-power:сила, потужність, влада, енергія, повноваження
-run:запуск, виконання, біг, керування, працювати
-character:символ, знак, характер, персонаж, вдача
-value:значення, величина, цінність, показник, вартість
-handle:обробник, дескриптор, рукоятка, оперувати
-key:ключ, клавіша, код, розгадка, вирішальний
-order:порядок, замовлення, наказ, черга, устрій
-point:точка, пункт, сенс, крапка, вказувати
-space:простір, космос, пробіл, місце, інтервал
-present:теперішній, подарунок, присутній, представляти
-right:правий, право, вірний, справедливість, відразу
-sound:звук, звучання, міцний, здоровий, надійний
-object:об'єкт, предмет, ціль, сутність, заперечувати
-view:вид, огляд, погляд, ракурс, думка
-match:матч, збіг, сірник, пара, підходити
-set:набір, комплект, множина, встановлення, фіксувати
-field:поле, галузь, сфера, майданчик, ділянка
-source:джерело, код, ресурс, причина, витік
-content:зміст, вміст, контент, суть, задоволений
-base:база, основа, підстава, фундамент, опора
-system:система, устрій, структура, методика, лад
-process:процес, обробка, операція, перебіг, процедура
-data:дані, відомості, інформація, факти, показники
-state:стан, держава, статус, режим, кондиція
-level:рівень, ступінь, етап, площина, горизонт
-range:діапазон, обсяг, межа, ряд, асортимент
-link:зв'язок, посилання, ланка, контакт, сполучна ланка
-sign:знак, сигнал, ознака, підпис, жест
-drive:привід, диск, їзда, поштовх, енергія
-spring:весна, пружина, джерело, стрибок, виникати
-water:вода, полив, зволожувати, водний
-force:сила, примус, змушувати, війська, натиск
-logic:логіка, логічність, здоровий глузд, послідовність
-mathematics:математика, математичний розрахунок
-function:функція, призначення, діяти, працювати, роль
-array:масив, набір, впорядкувати, стрій
-code:код, шифр, кодувати, звід законів
-variable:змінна, мінливий, параметр
-constant:константа, постійний, незмінний
-input:ввід, вхідні дані, внесок, вводити
-output:вивід, вихідні дані, результат, продукція
+apple:яблуко|I ate a red apple for breakfast.|Я з'їв червоне яблуко на сніданок.
+power:сила, потужність, влада|Knowledge is power.|Знання — це сила.
+run:запуск, виконання, біг|The program is ready to run.|Програма готова до виконання.
+logic:логіка, логічність|Logic will get you from A to B.|Логіка приведе вас з пункту А в пункт Б.
+mathematics:математика|Mathematics is the language of science.|Математика — це мова науки.
+function:функція, роль|The function returns a boolean value.|Функція повертає логічне значення.
+code:код, шифр|He wrote a very efficient code.|Він написав дуже ефективний код.
+variable:змінна, параметр|This variable stores the user's name.|Ця змінна зберігає ім'я користувача.
+constant:константа, постійна|The speed of light is a constant.|Швидкість світла — це константа.
+data:дані, відомості|We need more data to finish the report.|Нам потрібно більше даних, щоб закінчити звіт.
+system:система, устрій|The whole system crashed yesterday.|Вся система вийшла з ладу вчора.
+key:ключ, клавіша|Hard work is the key to success.|Ключ до успіху — наполеглива праця.
+value:значення, величина|The value of X is unknown.|Значення X невідоме.
+character:символ, характер|Each character counts in a password.|Кожен символ має значення у паролі.
+point:точка, пункт, сенс|That is a very good point.|Це дуже слушне зауваження (сенс).
+space:простір, космос, пробіл|There is no air in outer space.|У відкритому космосі немає повітря.
+object:об'єкт, предмет|Java is an object-oriented language.|Java — це об'єктно-орієнтована мова.
+source:джерело, вихідний код|Always check the source of information.|Завжди перевіряйте джерело інформації.
+link:зв'язок, посилання|Click the link to open the website.|Натисніть на посилання, щоб відкрити сайт.
+algorithm:алгоритм|The algorithm sorts data very quickly.|Алгоритм сортує дані дуже швидко.
+interface:інтерфейс|The user interface is very friendly.|Інтерфейс користувача дуже зручний.
+database:база даних|The database contains all records.|База даних містить усі записи.
+syntax:синтаксис|Check your code for syntax errors.|Перевірте свій код на наявність синтаксичних помилок.
+loop:цикл, петля|The loop repeats ten times.|Цикл повторюється десять разів.
+query:запит|The database query was successful.|Запит до бази даних був успішним.
+array:масив|The array stores five integers.|Масив зберігає п'ять цілих чисел.
+class:клас|This class defines the object structure.|Цей клас визначає структуру об'єкта.
+string:рядок|The string contains a message.|Рядок містить повідомлення.
+input:ввід, вхідні дані|Please provide your input.|Будь ласка, надайте ваші вхідні дані.
+output:вивід, результат|The output is displayed on the screen.|Результат виводиться на екран.
+network:мережа|The network connection is stable.|Мережеве з'єднання стабільне.
+memory:пам'ять|The computer needs more memory.|Комп'ютеру потрібно більше пам'яті.
+process:процес|The process is running in the background.|Процес виконується у фоновому режимі.
+hardware:обладнання|The hardware needs an upgrade.|Обладнання потребує оновлення.
+software:програмне забезпечення|The software is easy to install.|Програмне забезпечення легко встановити.
+file:файл|Save the changes to the file.|Збережіть зміни у файл.
+folder:папка|Create a new folder for your project.|Створіть нову папку для свого проекту.
+error:помилка|An unexpected error occurred.|Сталася непередбачена помилка.
+window:вікно|Close the window to exit.|Закрийте вікно, щоб вийти.
+task:завдання|The task was completed on time.|Завдання було виконано вчасно.
